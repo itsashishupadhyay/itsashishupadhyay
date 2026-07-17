@@ -1,14 +1,13 @@
-# Save as .github/workflows/snake.yml in the itsashishupadhyay/itsashishupadhyay repo.
-# Generates the contribution-snake animation the README embeds.
-# After adding: Actions tab → "Generate contribution snake" → Run workflow (once manually).
+# Replace the contents of .github/workflows/snake.yml with this file.
+# Fixes: (1) GITHUB_TOKEN now passed to the snake generator, (2) triggers on master.
 name: Generate contribution snake
 
 on:
   schedule:
-    - cron: "0 0 * * *"   # daily
+    - cron: "0 0 * * *"   # daily at midnight UTC
   workflow_dispatch:
   push:
-    branches: [main]
+    branches: [master, main]
 
 permissions:
   contents: write
@@ -16,16 +15,20 @@ permissions:
 jobs:
   snake:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
-      - uses: Platane/snk/svg-only@v3
+      - name: Generate snake SVGs
+        uses: Platane/snk/svg-only@v3
         with:
           github_user_name: itsashishupadhyay
           outputs: |
             dist/github-contribution-grid-snake.svg
-            dist/github-contribution-grid-snake-dark.svg?palette=github-dark&color_snake=#F5C518&color_dots=#161b22,#1a1a00,#4d3f00,#b39400,#F5C518
+            dist/github-contribution-grid-snake-dark.svg?palette=github-dark&color_snake=#F5C518
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Push to output branch
-        uses: crazy-max/ghaction-github-pages@v3.1.0
+      - name: Push SVGs to output branch
+        uses: crazy-max/ghaction-github-pages@v4
         with:
           target_branch: output
           build_dir: dist
