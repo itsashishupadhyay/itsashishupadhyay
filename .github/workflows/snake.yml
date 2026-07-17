@@ -1,0 +1,33 @@
+# Save as .github/workflows/snake.yml in the itsashishupadhyay/itsashishupadhyay repo.
+# Generates the contribution-snake animation the README embeds.
+# After adding: Actions tab → "Generate contribution snake" → Run workflow (once manually).
+name: Generate contribution snake
+
+on:
+  schedule:
+    - cron: "0 0 * * *"   # daily
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  snake:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: Platane/snk/svg-only@v3
+        with:
+          github_user_name: itsashishupadhyay
+          outputs: |
+            dist/github-contribution-grid-snake.svg
+            dist/github-contribution-grid-snake-dark.svg?palette=github-dark&color_snake=#F5C518&color_dots=#161b22,#1a1a00,#4d3f00,#b39400,#F5C518
+
+      - name: Push to output branch
+        uses: crazy-max/ghaction-github-pages@v3.1.0
+        with:
+          target_branch: output
+          build_dir: dist
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
