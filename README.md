@@ -6,7 +6,7 @@
 
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=venom&height=220&color=0:0d1117,50:F5C518,100:00E5FF&text=ASHISH%20UPADHYAY&fontSize=60&fontColor=F5C518&animation=fadeIn&desc=ELECTRICAL%20%C2%B7%20ELECTRONICS%20%C2%B7%20COMPUTER%20ENGINEERING&descSize=16&descAlignY=75&stroke=00E5FF&strokeWidth=1" width="100%"/>
+<img src="assets/header.svg" width="100%" alt="Ashish Upadhyay — Electrical · Electronics · Computer Engineering"/>
 
 <img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=600&size=22&duration=3000&pause=800&color=F5C518&center=true&vCenter=true&width=700&lines=Artist+in+an+Inventor's+body;Electrical+Engineer+%40+Meta+Reality+Labs;2%2C000%2C000%2B+devices+shipped+and+counting;Squeezing+milliwatts+out+of+silicon;Making+AR+glasses+a+reality;Professional+button-pusher+(the+testing+kind)" alt="Typing SVG" />
 
@@ -55,7 +55,7 @@ System online. Welcome, visitor. Scroll for schematics.
 
 <br/>
 
-## 📡 LIVE TELEMETRY
+<img src="assets/telemetry.svg" width="100%" alt="LIVE TELEMETRY — CH1: commits · CH2: sleep (no signal)"/>
 
 <div align="center">
 
@@ -205,7 +205,7 @@ struct ashish_t {
 
 <div align="center">
 
-## 📬 OPEN A CHANNEL
+<img src="assets/channel.svg" width="100%" alt="OPEN A CHANNEL — full duplex, no parity, no problem"/>
 
 *Have a project in mind? Want to collaborate? Just want to say hi?*
 
@@ -214,7 +214,7 @@ struct ashish_t {
 
 <br/><br/>
 
-<img src="https://raw.githubusercontent.com/itsashishupadhyay/itsashishupadhyay/output/github-contribution-grid-snake-dark.svg" alt="contribution snake" width="90%"/>
+<img src="https://raw.githubusercontent.com/itsashishupadhyay/itsashishupadhyay/output/game-of-life.svg" alt="Conway Twitty's Game of Life — seeded from my contribution graph" width="100%"/>
 
 <br/>
 

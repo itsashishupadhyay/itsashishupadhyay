@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="110" viewBox="0 0 1200 110" role="img" aria-labelledby="t">
+  <title id="t">Open a Channel — full duplex, no parity, no problem</title>
+  <defs>
+    <linearGradient id="bgg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0a0e13"/><stop offset="1" stop-color="#12161d"/>
+    </linearGradient>
+    <filter id="glow" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="1.8" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    
+  </defs>
+  <rect width="1200" height="110" rx="10" fill="url(#bgg)"/>
+  <rect x="10" y="10" width="1180" height="90" rx="7" fill="none"
+        stroke="#F5C518" stroke-opacity=".22" stroke-width="1"/>
+  
+  <text x="40" y="53" font-family="'Courier New',Courier,monospace" font-size="26" font-weight="700"
+        fill="#F5C518" letter-spacing="3">OPEN A CHANNEL</text>
+  <text x="40" y="78" font-family="'Courier New',Courier,monospace" font-size="10.5" fill="#98A0AB"
+        letter-spacing="1">FULL DUPLEX · 115200-8N1 · <tspan fill="#00E5FF">NO PARITY, NO PROBLEM</tspan></text>
+  <rect x="498" y="44" width="34" height="22" rx="4" fill="none"
+        stroke="#F5C518" stroke-opacity=".6"/>
+  <text x="515" y="59" text-anchor="middle" font-family="'Courier New',Courier,monospace" font-size="11"
+        fill="#F5C518">TX</text>
+  <line x1="540" y1="55" x2="1078" y2="55" stroke="#F5C518" stroke-opacity=".35"/>
+  <circle cx="540" cy="55" r="3.4" fill="#00E5FF" filter="url(#glow)"><animateTransform attributeName="transform" type="translate" from="0 0" to="538 0" begin="-0.1s" dur="2.8s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.08;.9;1" begin="-0.1s" dur="2.8s" repeatCount="indefinite"/></circle><circle cx="540" cy="55" r="3.4" fill="#00E5FF" filter="url(#glow)"><animateTransform attributeName="transform" type="translate" from="0 0" to="538 0" begin="-1.033s" dur="2.8s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.08;.9;1" begin="-1.033s" dur="2.8s" repeatCount="indefinite"/></circle><circle cx="540" cy="55" r="3.4" fill="#00E5FF" filter="url(#glow)"><animateTransform attributeName="transform" type="translate" from="0 0" to="538 0" begin="-1.966s" dur="2.8s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.08;.9;1" begin="-1.966s" dur="2.8s" repeatCount="indefinite"/></circle>
+  <line x1="1096" y1="69" x2="1096" y2="33" stroke="#F5C518" stroke-width="1.6"/>
+  <path d="M1089,69 L1096,57 L1103,69" fill="none"
+        stroke="#F5C518" stroke-width="1.6" stroke-linejoin="round"/>
+  <circle cx="1096" cy="33" r="2.4" fill="#00E5FF" filter="url(#glow)"/>
+  <circle cx="1096" cy="33" r="5" fill="none" stroke="#00E5FF" stroke-width="1.2"><animate attributeName="r" values="4;16" begin="0s" dur="1.9s" repeatCount="indefinite"/><animate attributeName="stroke-opacity" values=".9;0" begin="0s" dur="1.9s" repeatCount="indefinite"/></circle><circle cx="1096" cy="33" r="5" fill="none" stroke="#00E5FF" stroke-width="1.2"><animate attributeName="r" values="4;16" begin="-0.95s" dur="1.9s" repeatCount="indefinite"/><animate attributeName="stroke-opacity" values=".9;0" begin="-0.95s" dur="1.9s" repeatCount="indefinite"/></circle>
+</svg>
