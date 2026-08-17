@@ -55,20 +55,7 @@ System online. Welcome, visitor. Scroll for schematics.
 
 <br/>
 
-<img src="assets/telemetry.svg" width="100%" alt="LIVE TELEMETRY — CH1: commits · CH2: sleep (no signal)"/>
-
-<div align="center">
-
-<img src="https://github-readme-stats.vercel.app/api?username=itsashishupadhyay&show_icons=true&hide_border=true&bg_color=0d1117&title_color=F5C518&icon_color=00E5FF&text_color=c9d1d9&ring_color=F5C518&include_all_commits=true&count_private=true" height="170"/>
-<img src="https://github-readme-stats.vercel.app/api/top-langs/?username=itsashishupadhyay&layout=compact&hide_border=true&bg_color=0d1117&title_color=F5C518&text_color=c9d1d9&langs_count=8" height="170"/>
-
-<img src="https://streak-stats.demolab.com?user=itsashishupadhyay&theme=dark&hide_border=true&background=0d1117&ring=F5C518&fire=00E5FF&currStreakLabel=F5C518&sideLabels=c9d1d9&currStreakNum=00E5FF&sideNums=F5C518&dates=8b949e" height="170"/>
-
-<img src="https://github-readme-activity-graph.vercel.app/graph?username=itsashishupadhyay&bg_color=0d1117&color=c9d1d9&line=F5C518&point=00E5FF&area=true&area_color=1a1a00&hide_border=true&custom_title=COMMIT%20WAVEFORM%20—%20CH1%3A%20CODE%2C%20CH2%3A%20SLEEP%20(NO%20SIGNAL)" width="95%"/>
-
-<img src="https://github-profile-trophy.vercel.app/?username=itsashishupadhyay&theme=discord&no-frame=true&no-bg=true&column=7&title_color=F5C518" width="95%"/>
-
-</div>
+<img src="https://raw.githubusercontent.com/itsashishupadhyay/itsashishupadhyay/output/telemetry.svg" width="100%" alt="Live telemetry — repositories, clone traffic, stars, contributions, language spectrum"/>
 
 <br/>
 

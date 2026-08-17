@@ -2,7 +2,7 @@
 # Seeds a toroidal B3/S23 board from the contribution graph, simulates it
 # (with cosmic-ray SEU revivals), and publishes the animated SVG to the
 # output branch. New random seed every run = new colony every day.
-name: Conway Twitty's Game of Life
+name: Profile telemetry & Game of Life
 
 on:
   schedule:
@@ -24,6 +24,15 @@ jobs:
       - name: Simulate the colony
         run: python3 scripts/game_of_life.py --user ${{ github.repository_owner }} --out dist/game-of-life.svg
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # METRICS_TOKEN (a PAT with `repo` scope) unlocks traffic across every
+      # repo; the default GITHUB_TOKEN only sees this one. Traffic panels
+      # degrade gracefully without it rather than failing the run.
+      - name: Sample telemetry
+        run: python3 scripts/telemetry.py --user ${{ github.repository_owner }} --out dist/telemetry.svg --history dist/telemetry-history.json
+        env:
+          METRICS_TOKEN: ${{ secrets.METRICS_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Push SVG to output branch
