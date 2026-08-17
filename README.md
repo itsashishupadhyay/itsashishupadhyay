@@ -207,7 +207,7 @@ struct ashish_t {
 
 <br/><br/>
 
-<a href="https://itsashishupadhyay.github.io/"><img src="assets/game-of-life-static.svg" width="100%" alt="Conway Twitty's Game of Life — click to run the simulation"/></a>
+<a href="https://itsashishupadhyay.github.io/itsashishupadhyay/"><img src="assets/game-of-life-static.svg" width="100%" alt="Conway Twitty's Game of Life — click to run the simulation"/></a>
 
 <br/>
 
