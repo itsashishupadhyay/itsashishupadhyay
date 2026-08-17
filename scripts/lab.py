@@ -239,7 +239,10 @@ def main():
     if not token:
         sys.exit("[lab] need METRICS_TOKEN or GITHUB_TOKEN")
 
-    repos = [r for r in api("/user/repos?per_page=100&affiliation=owner", token)
+    # /users/<login>/repos, not /user/repos: the latter means "the authenticated
+    # user", which a repo-scoped Actions token is not (403). This endpoint
+    # returns public repos only — exactly what belongs in a public portfolio.
+    repos = [r for r in api(f"/users/{args.user}/repos?per_page=100&type=owner", token)
              if not r["fork"] and not r["private"] and r["name"] not in SKIP]
     repos.sort(key=lambda r: (-r["stargazers_count"], r["updated_at"]), reverse=False)
     repos.sort(key=lambda r: -r["stargazers_count"])

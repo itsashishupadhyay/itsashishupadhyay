@@ -37,6 +37,14 @@ jobs:
           METRICS_TOKEN: ${{ secrets.METRICS_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Push SVG to output branch
+        uses: crazy-max/ghaction-github-pages@v4
+        with:
+          target_branch: output
+          build_dir: dist
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       # Cards live on master (relative paths in the README), so commit them
       # back only when something actually changed. Commits made with
       # GITHUB_TOKEN don't re-trigger this workflow, so this can't loop.
@@ -52,12 +60,4 @@ jobs:
           fi
         env:
           METRICS_TOKEN: ${{ secrets.METRICS_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Push SVG to output branch
-        uses: crazy-max/ghaction-github-pages@v4
-        with:
-          target_branch: output
-          build_dir: dist
-        env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
