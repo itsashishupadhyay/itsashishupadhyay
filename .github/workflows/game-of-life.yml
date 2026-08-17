@@ -13,7 +13,8 @@ on:
 
 permissions:
   contents: write
-  administration: read   # traffic/clones for this repo; other repos need METRICS_TOKEN
+# NOTE: no permissions key grants GITHUB_TOKEN traffic access — the traffic
+# API needs push rights from a real PAT. Set METRICS_TOKEN to collect clones.
 
 jobs:
   life:
