@@ -51,11 +51,12 @@ jobs:
       - name: Refresh project cards
         run: |
           python3 scripts/lab.py --user ${{ github.repository_owner }} --emit-markdown
-          if ! git diff --quiet -- assets/projects; then
+          python3 scripts/boot.py --user ${{ github.repository_owner }} --out assets/boot.svg
+          if ! git diff --quiet -- assets/projects assets/boot.svg; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add assets/projects
-            git commit -m "Refresh project cards [skip ci]"
+            git add assets/projects assets/boot.svg
+            git commit -m "Refresh project cards and boot sequence [skip ci]"
             git push origin HEAD:${{ github.ref_name }}
           fi
         env:

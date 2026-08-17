@@ -1,5 +1,5 @@
 <!-- ╔══════════════════════════════════════════════════════════════════╗
-     ║   A S H I S H   U P A D H Y A Y  ·  PROFILE FIRMWARE v5.0         ║
+     ║   A S H I S H   U P A D H Y A Y  ·  PROFILE FIRMWARE v6.0         ║
      ║   If you're reading the source, you're my kind of person.        ║
      ║   Easter egg: the answer is 42 mW.                               ║
      ╚══════════════════════════════════════════════════════════════════╝ -->
@@ -21,19 +21,7 @@
 
 <br/>
 
-```console
-$ sudo boot ashish --profile=engineer --verbosity=high
-
-[ OK ] Loading caffeine drivers ..................... v11.4 (stable)
-[ OK ] Mounting /dev/solder_iron .................... 350°C, ready
-[ OK ] Calibrating oscilloscope ..................... 4 channels locked
-[ OK ] Power budget ................................. every mW accounted for
-[WARN] sleep.service not found ...................... skipping (as usual)
-[ OK ] Loading 2,000,000+ shipped devices ........... verified
-[ OK ] Humor module ................................. dangerously enabled
-
-System online. Welcome, visitor. Scroll for schematics.
-```
+<img src="assets/boot.svg" width="100%" alt="Cold boot — power-on self test, then every repository mounted as a volume"/>
 
 <br/>
 
