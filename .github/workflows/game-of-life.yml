@@ -52,11 +52,13 @@ jobs:
         run: |
           python3 scripts/lab.py --user ${{ github.repository_owner }} --emit-markdown
           python3 scripts/boot.py --user ${{ github.repository_owner }} --out assets/boot.svg
-          if ! git diff --quiet -- assets/projects assets/boot.svg; then
+          python3 scripts/game_of_life.py --user ${{ github.repository_owner }} --static --out assets/game-of-life-static.svg
+          python3 scripts/life_page.py --user ${{ github.repository_owner }} --out docs/index.html
+          if ! git diff --quiet -- assets docs; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add assets/projects assets/boot.svg
-            git commit -m "Refresh project cards and boot sequence [skip ci]"
+            git add assets docs
+            git commit -m "Refresh generated profile assets [skip ci]"
             git push origin HEAD:${{ github.ref_name }}
           fi
         env:

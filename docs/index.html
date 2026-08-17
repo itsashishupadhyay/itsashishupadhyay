@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Conway Twitty's Game of Life</title>
+<meta name="description" content="Every green square on my GitHub contribution graph is a living cell. Press start."/>
+<style>
+  :root {
+    --gold:#F5C518; --gold-hi:#F8DE7E; --cyan:#00E5FF;
+    --ink:#E8E2D2; --gray:#98A0AB; --bg-a:#0a0e13; --bg-b:#12161d;
+    --mono:'Courier New',Courier,monospace;
+  }
+  * { box-sizing:border-box; }
+  body {
+    margin:0; padding:28px 16px 56px; background:var(--bg-a); color:var(--ink);
+    font-family:var(--mono);
+    background-image:linear-gradient(180deg,var(--bg-a),var(--bg-b));
+    min-height:100vh;
+  }
+  .wrap { max-width:1200px; margin:0 auto; border:1px solid rgba(245,197,24,.22);
+          border-radius:12px; padding:22px 24px 26px; background:rgba(0,0,0,.25); }
+  h1 { font-size:21px; letter-spacing:2px; color:var(--gold); margin:0 0 4px; }
+  .sub { font-size:11px; color:var(--gray); letter-spacing:1px; margin-bottom:18px; }
+  .badge { display:inline-block; border:1px solid rgba(0,229,255,.5); color:var(--cyan);
+           border-radius:4px; padding:2px 10px; font-size:11px; margin-left:10px;
+           vertical-align:middle; letter-spacing:1px; }
+  .board { width:100%; height:auto; display:block; margin:6px 0 4px; }
+  .readout { display:flex; flex-wrap:wrap; gap:22px; align-items:baseline;
+             font-size:13px; margin:12px 2px 16px; }
+  .readout b { color:var(--gold); font-size:19px; letter-spacing:1px; }
+  .readout span { color:var(--gray); font-size:10.5px; letter-spacing:1px; }
+  .controls { display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+  button {
+    font-family:var(--mono); font-size:14px; font-weight:700; letter-spacing:1.5px;
+    color:var(--gold); background:rgba(245,197,24,.12);
+    border:1.5px solid var(--gold); border-radius:8px; padding:11px 22px;
+    cursor:pointer; transition:background .15s,color .15s,transform .05s;
+  }
+  button:hover:not(:disabled) { background:rgba(245,197,24,.26); }
+  button:active:not(:disabled) { transform:translateY(1px); }
+  button:disabled { opacity:.34; cursor:not-allowed; }
+  button.primary { background:var(--gold); color:#0d1117; }
+  button.primary:hover:not(:disabled) { background:var(--gold-hi); }
+  button:focus-visible { outline:2px solid var(--cyan); outline-offset:3px; }
+  label { font-size:11px; color:var(--gray); letter-spacing:1px;
+          display:flex; align-items:center; gap:9px; margin-left:6px; }
+  input[type=range] { accent-color:var(--gold); width:132px; }
+  .msg { min-height:44px; margin:18px 2px 0; font-size:13.5px; line-height:1.5;
+         color:var(--gold); }
+  .msg.end { color:var(--cyan); font-weight:700; }
+  .rules { margin-top:22px; padding-top:16px; border-top:1px solid rgba(245,197,24,.15);
+           font-size:10.5px; color:rgba(232,226,210,.55); line-height:1.85; }
+  a { color:var(--cyan); }
+  @media (max-width:640px){ .readout{gap:14px} button{padding:10px 15px;font-size:12.5px} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>CONWAY TWITTY'S GAME OF LIFE <span class="badge">B3/S23</span></h1>
+  <div class="sub">EVERY GREEN SQUARE ON MY CONTRIBUTION GRAPH IS A LIVING CELL · TORUS TOPOLOGY · MAX 1000 GENERATIONS</div>
+
+  <svg class="board" viewBox="0 0 922 140" role="img" aria-label="Game of Life board">
+    <rect width="922" height="140" fill="#0d1117" rx="8"/>
+    <g id="grid"></g>
+    <g id="cells"></g>
+  </svg>
+
+  <div class="readout">
+    <div><b id="gen">0</b> <span>GENERATION</span></div>
+    <div><b id="pop">0</b> <span>LIVE CELLS</span></div>
+    <div><b id="peak">0</b> <span>PEAK</span></div>
+    <div><b id="seu">0</b> <span>COSMIC RAYS</span></div>
+  </div>
+
+  <div class="controls">
+    <button id="run" class="primary">▶ START</button>
+    <button id="restart" disabled>↻ RESTART</button>
+    <button id="step" >⏭ STEP</button>
+    <label>SPEED <input id="speed" type="range" min="1" max="60" value="18"/></label>
+  </div>
+
+  <div class="msg" id="msg" role="status" aria-live="polite">Press start. The board stays exactly as my contribution graph until you do.</div>
+
+  <div class="rules">
+    RULE B3/S23 — no relation to the country singer, though both fill a board with hits.<br/>Every green square from my contribution graph is a living cell. Fewer than 2 neighbors: dies of underpopulation — nobody to pair-program with.<br/>More than 3: dies of thermal throttling. Exactly 3: a new cell is born, and we don't ask questions.<br/>The edges wrap, because all good universes are toruses.
+  </div>
+</div>
+
+<script>
+const SEED = [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 4, 3, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 6, 1, 1, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 2, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 7, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 2, 0, 0, 1, 5, 0, 0, 0, 0, 0], MONTHS = [8, 8, 8, 9, 9, 9, 9, 10, 10, 10, 10, 11, 11, 11, 11, 11, 12, 12, 12, 12, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 5, 6, 6, 6, 6, 7, 7, 7, 7, 8, 8, 8];
+const COLS = 53, ROWS = 7, CELL = 14, PITCH = 17;
+const OX = 12, OY = 12, MAXGEN = 1000, SEU_BUDGET = 6;
+const GREENS = ["#0e4429", "#006d32", "#26a641", "#39d353"], GOLD = "#F5C518", CYAN = "#00E5FF";
+const MILESTONES = {"50": ["Fifty multiplications and no sign of settling down. Your cells have clearly found their duty cycle \u2014 and it's aggressive.", "50 generations in and the whole board is coupling. Capacitively, inductively, enthusiastically."], "100": ["100 multiplications. Your MAC unit is doing multiply-and-ACCUMULATE in front of everyone, and nobody's complaining.", "Triple digits \u2014 the colony has achieved mutual inductance. When one cell flips, every neighbor feels it."], "150": ["150 generations of sustained oscillation. Somebody should check the thermal budget, because it is getting hot in here.", "Still multiplying at 150. This stopped being a simulation a while ago \u2014 it's a breeder reactor now."], "200": ["200+ multiplications. 'Prolific' is underselling it \u2014 this colony has a serious fan-out situation.", "Two hundred generations, rising edges everywhere. Active high? Extremely."]}, WILDCARDS = ["Forward-biased and fully saturated. The datasheet swore this operating region was safe.", "Gain > 1 with positive feedback \u2014 the textbook definition of 'things escalating quickly.'"];
+const EXTINCT = ["YOUR GENERATION LASTED {x} MULTIPLICATIONS \u2014 then undervoltage lockout. Even great oscillators need a nap.", "EXTINCT AT GENERATION {x}. Cause of death: insufficient decoupling. Story of every breakup.", "{x} MULTIPLICATIONS, THEN SILENCE. The magic smoke has left the colony. Pour one out (\u2264 42 mW)."], STEADY = ["STEADY STATE AT GEN {x} \u2014 the survivors formed still lifes and oscillators: technically alive, allergic to change. Like legacy code."], CHAOTIC = "SIM WINDOW ENDED AT GEN {x} \u2014 COLONY OUTLIVED THE BUDGET. UNBOTHERED.";
+const PATTERNS = {"GLIDER": [[0, 1], [1, 2], [2, 0], [2, 1], [2, 2]], "R-PENTOMINO": [[0, 1], [0, 2], [1, 0], [1, 1], [2, 1]], "LWSS": [[1, 0], [4, 0], [0, 1], [0, 2], [4, 2], [0, 3], [1, 3], [2, 3], [3, 3]]};
+
+const N = COLS * ROWS;
+const idx = (w, d) => w * ROWS + d;
+const nbrs = [];
+for (let w = 0; w < COLS; w++) for (let d = 0; d < ROWS; d++) {
+  const list = [];
+  for (const dw of [-1, 0, 1]) for (const dd of [-1, 0, 1]) {
+    if (!dw && !dd) continue;
+    list.push(idx((w + dw + COLS) % COLS, (d + dd + ROWS) % ROWS));
+  }
+  nbrs[idx(w, d)] = list;
+}
+
+const gridEl = document.getElementById('grid');
+const cellsEl = document.getElementById('cells');
+const rects = [];
+let frag = '';
+for (let w = 0; w < COLS; w++) for (let d = 0; d < ROWS; d++) {
+  frag += `<rect x="${OX + w * PITCH}" y="${OY + d * PITCH}" width="${CELL}" height="${CELL}" rx="3" fill="none" stroke="${GOLD}" stroke-opacity=".10" stroke-width=".6"/>`;
+}
+gridEl.innerHTML = frag;
+frag = '';
+for (let w = 0; w < COLS; w++) for (let d = 0; d < ROWS; d++) {
+  frag += `<rect id="c${idx(w,d)}" x="${OX + w * PITCH}" y="${OY + d * PITCH}" width="${CELL}" height="${CELL}" rx="3" fill="${GOLD}" fill-opacity="0"/>`;
+}
+cellsEl.innerHTML = frag;
+for (let i = 0; i < N; i++) rects[i] = document.getElementById('c' + i);
+
+// quartile thresholds so gen 0 matches GitHub's own heat levels
+const counts = SEED.filter(v => v > 0).sort((a, b) => a - b);
+const th = [.25, .5, .75].map(p => counts[Math.min(counts.length - 1, Math.floor(p * counts.length))] || 1);
+const heat = v => GREENS[th.reduce((n, t) => n + (v > t ? 1 : 0), 0)];
+
+let state, gen, peak, seuUsed, timer = null, seen, ended, greens = [];
+for (let i = 0; i < N; i++) if (SEED[i] > 0) greens.push(i);
+
+function paintSeed() {
+  for (let i = 0; i < N; i++) {
+    rects[i].setAttribute('fill', SEED[i] > 0 ? heat(SEED[i]) : GOLD);
+    rects[i].setAttribute('fill-opacity', SEED[i] > 0 ? '1' : '0');
+  }
+}
+function paint() {
+  for (let i = 0; i < N; i++) {
+    rects[i].setAttribute('fill', GOLD);
+    rects[i].setAttribute('fill-opacity', state[i] ? '1' : '0');
+  }
+}
+function pop() { let n = 0; for (let i = 0; i < N; i++) n += state[i]; return n; }
+function key() { return state.join(''); }
+
+function reset(showSeed) {
+  stop();
+  state = new Uint8Array(N);
+  for (const i of greens) state[i] = 1;
+  gen = 0; peak = pop(); seuUsed = 0; seen = new Map(); ended = false;
+  seen.set(key(), 0);
+  if (showSeed) paintSeed(); else paint();
+  document.getElementById('gen').textContent = '0';
+  document.getElementById('pop').textContent = peak;
+  document.getElementById('peak').textContent = peak;
+  document.getElementById('seu').textContent = '0';
+  setMsg('Press start. The board stays exactly as my contribution graph until you do.', false);
+  document.getElementById('run').textContent = '▶ START';
+  document.getElementById('run').disabled = false;
+  document.getElementById('step').disabled = false;
+}
+
+function setMsg(t, isEnd) {
+  const el = document.getElementById('msg');
+  el.textContent = t;
+  el.className = 'msg' + (isEnd ? ' end' : '');
+}
+const pick = a => a[Math.floor(Math.random() * a.length)];
+
+function inject() {
+  const anchor = greens[Math.floor(Math.random() * greens.length)];
+  const names = Object.keys(PATTERNS);
+  const name = names[Math.floor(Math.random() * names.length)];
+  const w0 = Math.floor(anchor / ROWS), d0 = anchor % ROWS;
+  for (const [dw, dd] of PATTERNS[name])
+    state[idx((w0 + dw) % COLS, (d0 + dd) % ROWS)] = 1;
+  seuUsed++;
+  document.getElementById('seu').textContent = seuUsed;
+  const wk = String(w0).padStart(2, '0');
+  setMsg(`⚡ SINGLE-EVENT UPSET at week ${wk} — ${name} injected. The colony lives again.`, false);
+  seen = new Map(); seen.set(key(), gen);
+}
+
+function finish(text) {
+  ended = true; stop();
+  setMsg(text, true);
+  document.getElementById('run').disabled = true;
+  document.getElementById('step').disabled = true;
+  document.getElementById('run').textContent = '▶ START';
+}
+
+function tick() {
+  if (ended) return;
+  const next = new Uint8Array(N);
+  for (let i = 0; i < N; i++) {
+    let n = 0; const list = nbrs[i];
+    for (let k = 0; k < 8; k++) n += state[list[k]];
+    next[i] = (n === 3 || (n === 2 && state[i])) ? 1 : 0;
+  }
+  state = next; gen++;
+  const p = pop();
+  if (p > peak) { peak = p; document.getElementById('peak').textContent = peak; }
+  document.getElementById('gen').textContent = gen;
+  document.getElementById('pop').textContent = p;
+  paint();
+
+  for (const m of [200, 150, 100, 50]) {
+    if (gen === m) {
+      const pool = MILESTONES[m].concat(m >= 100 ? WILDCARDS : []);
+      setMsg(`GEN ${m} · ${pick(pool)}`, false);
+      break;
+    }
+  }
+
+  const k = key();
+  const stalled = p === 0 ? 'extinct' : (seen.has(k) ? 'steady' : null);
+  if (stalled) {
+    if (seuUsed < SEU_BUDGET) { inject(); paint(); return; }
+    if (stalled === 'extinct') finish(EXTINCT[Math.floor(Math.random() * EXTINCT.length)].replace('{x}', gen));
+    else finish(STEADY[0].replace('{x}', seen.get(k)));
+    return;
+  }
+  seen.set(k, gen);
+  if (gen >= MAXGEN) finish(CHAOTIC.replace('{x}', gen));
+}
+
+function speedMs() { return Math.round(1000 / +document.getElementById('speed').value); }
+function start() {
+  if (ended || timer) return;
+  paint();
+  timer = setInterval(tick, speedMs());
+  document.getElementById('run').textContent = '⏸ PAUSE';
+  document.getElementById('restart').disabled = false;
+}
+function stop() {
+  if (timer) { clearInterval(timer); timer = null; }
+  const b = document.getElementById('run');
+  if (!ended) b.textContent = gen ? '▶ RESUME' : '▶ START';
+}
+
+document.getElementById('run').onclick = () => { timer ? stop() : start(); };
+document.getElementById('restart').onclick = () => {
+  reset(true);
+  document.getElementById('restart').disabled = true;
+};
+document.getElementById('step').onclick = () => { stop(); if (!gen) paint(); tick(); document.getElementById('restart').disabled = false; };
+document.getElementById('speed').oninput = () => { if (timer) { clearInterval(timer); timer = setInterval(tick, speedMs()); } };
+document.addEventListener('keydown', e => {
+  if (e.code === 'Space') { e.preventDefault(); timer ? stop() : start(); }
+  if (e.key === 'r' || e.key === 'R') document.getElementById('restart').click();
+});
+
+reset(true);
+</script>
+</body>
+</html>

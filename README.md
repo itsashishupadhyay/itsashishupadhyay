@@ -207,7 +207,7 @@ struct ashish_t {
 
 <br/><br/>
 
-<img src="https://raw.githubusercontent.com/itsashishupadhyay/itsashishupadhyay/output/game-of-life.svg" alt="Conway Twitty's Game of Life — seeded from my contribution graph" width="100%"/>
+<a href="https://itsashishupadhyay.github.io/"><img src="assets/game-of-life-static.svg" width="100%" alt="Conway Twitty's Game of Life — click to run the simulation"/></a>
 
 <br/>
 
