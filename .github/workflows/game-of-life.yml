@@ -37,6 +37,23 @@ jobs:
           METRICS_TOKEN: ${{ secrets.METRICS_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      # Cards live on master (relative paths in the README), so commit them
+      # back only when something actually changed. Commits made with
+      # GITHUB_TOKEN don't re-trigger this workflow, so this can't loop.
+      - name: Refresh project cards
+        run: |
+          python3 scripts/lab.py --user ${{ github.repository_owner }} --emit-markdown
+          if ! git diff --quiet -- assets/projects; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add assets/projects
+            git commit -m "Refresh project cards [skip ci]"
+            git push origin HEAD:${{ github.ref_name }}
+          fi
+        env:
+          METRICS_TOKEN: ${{ secrets.METRICS_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Push SVG to output branch
         uses: crazy-max/ghaction-github-pages@v4
         with:
